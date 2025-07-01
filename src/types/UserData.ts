@@ -1,25 +1,26 @@
 export type UserData = {
-  username: string;
-  profile: {
+  user: {
+    username: string;
     realName: string;
-    websites: string[];
-    countryName: string | null;
-    company: string | null;
-    school: string | null;
+    countryName: string;
+    company: string;
+    school: string;
     aboutMe: string;
     reputation: number;
     ranking: number;
   };
-  submitStats: {
-    acSubmissionNum: {
-      difficulty: "All" | "Easy" | "Medium" | "Hard";
-      count: number;
-      submissions: number;
-    }[];
-    totalSubmissionNum: {
-      difficulty: "All" | "Easy" | "Medium" | "Hard";
-      count: number;
-      submissions: number;
-    }[];
-  };
+  plainAcSubmissions: {
+    userId: number;
+    username: string;
+    difficulty: "All" | "Easy" | "Medium" | "Hard";
+    count: number;
+    submissions: number;
+  }[];
+  plainTotalSubmissions: {
+    userId: number;
+    username: string;
+    difficulty: "All" | "Easy" | "Medium" | "Hard";
+    count: number;
+    submissions: number;
+  }[];
 };

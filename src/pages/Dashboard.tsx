@@ -11,13 +11,14 @@ const Dashboard = () => {
     fetch(`http://localhost:3000/user/getuser/${username}`)
       .then((response) => response)
       .then((e) => e.json())
-      .then((e) => {
+      .then((e: UserData) => {
+        console.log(e);
         setUserData(e);
       })
       .catch((err) => console.log(err));
   };
   return (
-    <div className="justify-center flex items-center m-2">
+    <div className="justify-center flex items-center">
       {!userData ? (
         <UserDataForm onSubmit={handleSubmit} />
       ) : (
