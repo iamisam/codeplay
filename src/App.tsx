@@ -2,7 +2,8 @@ import Navbar from "./components/ui/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
-import Connect from "./pages/Connect";
+import Connect from "./pages/Dashboard";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/connect" element={<Connect />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
