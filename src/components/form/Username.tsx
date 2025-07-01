@@ -1,37 +1,30 @@
-import React, { useState, type FormEvent } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const StringInputForm: React.FC = () => {
-  const [inputValue, setInputValue] = useState<string>("");
-  const handleSubmit = (e: FormEvent) => {
+const Username = () => {
+  const [username, setUsername] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    fetch(`https://alfa-leetcode-api.onrender.com/${inputValue}`)
-      .then((response) => response)
-      .then((e) => e.json())
-      .then((e) => console.log(e))
-      .catch((err) => console.log(err));
+    if (username.trim()) navigate(`/home?user=${username}`);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label className="text-white font-semibold" htmlFor="stringInput">
-        Enter a string:&nbsp;&nbsp;
-      </label>
-      <input
-        className="text-teal-100 border-white p-2 border-1"
-        placeholder="Enter your Leetcode Username"
-        type="text"
-        id="stringInput"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-      />
-      <button
-        className="text-black p-1 border-black ml-2 border-black hover:border-2 bg-yellow-400 p-2 hover:font-bold not-hover:font-normal bg-[#fff]"
-        type="submit"
-      >
-        Submit
-      </button>
-    </form>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-tr from-violet-500 to-indigo-600 text-white">
+      <h1 className="text-4xl font-bold mb-6">LeetCode Gamifier</h1>
+      <form onSubmit={handleSubmit} className="flex gap-4 bg-white p-4 rounded shadow text-black">
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter LeetCode username"
+          className="p-2 border rounded"
+        />
+        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
+      </form>
+    </div>
   );
 };
 
-export default StringInputForm;
+export default Username;
