@@ -1,10 +1,11 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Home from './pages/Home';
-import Connect from './pages/Connect'; // You may rename this to Dashboard later
-import NoPage from './pages/No.Page'; // Or NoPage if you're keeping your version
-import Navbar from './components/ui/Navbar';
+import Home from "./pages/Home";
+import Connect from "./pages/Connect"; // You may rename this to Dashboard later
+import NoPage from "./pages/NoPage"; // Or NoPage if you're keeping your version
+import Navbar from "./components/ui/Navbar";
+import Dashboard from "./pages/Dashboard";
 
 const App = () => {
   return (
@@ -14,7 +15,7 @@ const App = () => {
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/dashboard" element={<Connect />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/connect" element={<Connect />} />
             <Route path="*" element={<NoPage />} />
           </Routes>
