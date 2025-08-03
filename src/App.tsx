@@ -1,28 +1,40 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import Home from "./pages/Home";
-import Connect from "./pages/Connect"; // You may rename this to Dashboard later
-import NoPage from "./pages/NoPage"; // Or NoPage if you're keeping your version
+import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/ui/Navbar";
+import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
+import AuthPage from "./pages/AuthPage";
+import Settings from "./pages/Settings";
+import Search from "./pages/Search";
+import FriendsPanel from "./components/ui/FriendsPanel";
+import UserProfilePage from "./pages/UserProfile";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { FriendsProvider } from "./context/FriendsContext";
 
-const App = () => {
+function App() {
   return (
     <Router>
-      <div className="p-0 m-0 box-border">
-        <div className="min-h-screen bg-[#002844] h-full w-full">
+      <AuthProvider>
+        <FriendsProvider>
           <Navbar />
+          <FriendsPanel />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/connect" element={<Connect />} />
-            <Route path="*" element={<NoPage />} />
+            {/* Public Routes */}
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/user/:displayName" element={<UserProfilePage />} />
+              {/* Add other protected routes here */}
+            </Route>
           </Routes>
-        </div>
-      </div>
+        </FriendsProvider>
+      </AuthProvider>
     </Router>
   );
-};
+}
 
 export default App;
