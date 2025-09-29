@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { axiosPrivate } from "../api/axios";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { useFriends } from "../hooks/useFriends";
+import ChallengeSetupModal from "../components/ui/ChallengeSetupModal";
 
 interface SubmissionStat {
   difficulty: string;
@@ -31,9 +32,9 @@ const UserProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isActionLoading, setIsActionLoading] = useState(false);
-
+  const [isChallengeModalOpen, setIsChallengeModalOpen] = useState(false);
   const { user: currentUser } = useAuth();
-  const { refreshData: refreshFriendsData } = useFriends();
+  const { refreshData: refreshFriendsData, refreshTimestamp } = useFriends();
 
   const fetchProfile = useCallback(async () => {
     if (!displayName) return;
@@ -51,7 +52,7 @@ const UserProfilePage = () => {
 
   useEffect(() => {
     fetchProfile();
-  }, [fetchProfile]);
+  }, [fetchProfile, refreshTimestamp]);
 
   const handleSendRequest = async () => {
     if (!profile) return;
@@ -90,6 +91,19 @@ const UserProfilePage = () => {
       refreshFriendsData();
     } catch (error) {
       console.error("Failed to decline/cancel request", error);
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
+
+  const handleRemoveFriend = async () => {
+    if (!profile) return;
+    setIsActionLoading(true);
+    try {
+      await axiosPrivate.delete(`/friends/${profile.userId}`);
+      refreshFriendsData();
+    } catch (error) {
+      console.error("Failed to remove friend", error);
     } finally {
       setIsActionLoading(false);
     }
@@ -153,20 +167,29 @@ const UserProfilePage = () => {
 
     if (friendshipStatus.status === "accepted") {
       return (
-        <button
-          disabled
-          className="bg-slate-700 text-emerald-400 font-bold py-2 px-6 rounded-md flex items-center gap-2 cursor-default"
-        >
-          <svg
-            className="w-5 h-5"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+        <div className="flex items-center gap-2">
+          <button
+            disabled
+            className="bg-slate-700 text-emerald-400 font-bold py-2 px-6 rounded-md flex items-center gap-2 cursor-default"
           >
-            <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
-          </svg>
-          Friends
-        </button>
+            <svg
+              className="w-5 h-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
+            </svg>
+            Friends
+          </button>
+          <button
+            onClick={handleRemoveFriend}
+            disabled={isActionLoading}
+            className="bg-red-800/80 hover:bg-red-700/80 text-white font-semibold py-2 px-4 rounded-md transition-colors"
+          >
+            Remove
+          </button>
+        </div>
       );
     }
 
@@ -185,6 +208,14 @@ const UserProfilePage = () => {
         Profile could not be loaded.
       </div>
     );
+  const canChallenge =
+    profile &&
+    (profile.profileVisibility === "public" ||
+      profile.friendshipStatus?.status === "accepted");
+  const canCompare =
+    profile &&
+    (profile.profileVisibility === "public" ||
+      profile.friendshipStatus?.status === "accepted");
 
   if (
     profile.profileVisibility === "private" &&
@@ -222,7 +253,25 @@ const UserProfilePage = () => {
             </h1>
             <p className="text-slate-400 mt-1">@{profile.leetcodeUsername}</p>
           </div>
-          {renderFriendshipButton()}
+          <div className="flex items-center gap-4">
+            {canChallenge && (
+              <button
+                onClick={() => setIsChallengeModalOpen(true)}
+                className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-md transition-colors"
+              >
+                Challenge
+              </button>
+            )}
+            {canCompare && (
+              <Link
+                to={`/compare/${profile.displayName || profile.leetcodeUsername}`}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition-colors"
+              >
+                Compare Stats
+              </Link>
+            )}
+            {renderFriendshipButton()}
+          </div>
         </header>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <StatCard
@@ -256,6 +305,18 @@ const UserProfilePage = () => {
               ))}
           </div>
         </div>
+
+        {profile && (
+          <ChallengeSetupModal
+            isOpen={isChallengeModalOpen}
+            onClose={() => setIsChallengeModalOpen(false)}
+            recipient={{
+              userId: profile.userId,
+              displayName: profile.displayName,
+              leetcodeUsername: profile.leetcodeUsername,
+            }}
+          />
+        )}
       </div>
     </div>
   );

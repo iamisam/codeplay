@@ -23,7 +23,7 @@ const Navbar = () => {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand/Logo */}
         <Link
-          to="/"
+          to={accessToken ? "/dashboard" : "/"}
           className="flex items-center gap-2 text-xl font-bold text-slate-100"
         >
           <svg

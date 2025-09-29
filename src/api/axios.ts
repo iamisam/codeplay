@@ -2,8 +2,9 @@ import axios from "axios";
 
 const BASE_URL = "/api"; // This is the key!
 
-export default axios.create({
+const api = axios.create({
   baseURL: BASE_URL,
+  withCredentials: true,
 });
 
 export const axiosPrivate = axios.create({
@@ -11,3 +12,5 @@ export const axiosPrivate = axios.create({
   headers: { "Content-Type": "application/json" },
   withCredentials: true, // Important for sending cookies
 });
+
+export default api;

@@ -6,6 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { axiosPrivate } from "../api/axios";
+import api from "../api/axios";
 import { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import axios from "axios";
 
@@ -39,11 +40,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const verifyRefreshToken = async () => {
       try {
-        const response = await axiosPrivate.post("/token/refresh");
+        const response = await api.post("/token/refresh", null, {
+          withCredentials: true,
+        });
         setAccessToken(response.data.accessToken);
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
-          console.log(err.response?.data?.message);
           console.log("No active session or refresh token expired.");
         }
       } finally {
