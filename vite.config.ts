@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: process.env.NODE_BACKEND_URL,
+        target: "https://codeplay-backend-o9ve.onrender.com",
         changeOrigin: true,
       },
     },
