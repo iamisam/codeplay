@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { axiosPrivate } from "../api/axios"; // Use the public instance
+import { axiosPrivate } from "../api/axios";
 import { Link } from "react-router-dom";
 
 interface SearchResult {
