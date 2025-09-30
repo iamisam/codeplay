@@ -10,7 +10,7 @@ import api from "../api/axios";
 import { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import axios from "axios";
 
-// Define a custom interface for our request config to include the _retry property
+// Define a custom interface for request config to include the _retry property
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
@@ -49,15 +49,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           console.log("No active session or refresh token expired.");
         }
       } finally {
-        setIsAuthLoading(false); // <-- Stop loading once check is complete
+        setIsAuthLoading(false); // stop loading
       }
     };
 
     verifyRefreshToken();
   }, []);
 
-  //
-  /// This effect runs whenever the accessToken changes
+  // This runs whenever the accessToken changes
   useEffect(() => {
     const fetchUser = async () => {
       if (accessToken) {

@@ -77,7 +77,6 @@ const Dashboard = () => {
   const handleStatusChange = async (newStatus: "online" | "away") => {
     if (!user) return;
 
-    // Optimistically update the UI
     const oldStatus = user.status;
     setUser({ ...user, status: newStatus });
 
@@ -98,7 +97,6 @@ const Dashboard = () => {
     (s) => s.difficulty === "All",
   );
 
-  // Calculate Acceptance Rate
   let acceptanceRate = 0;
   if (allAcStats && allTotalStats && allTotalStats.submissions > 0) {
     // LeetCode formula is (total accepted submissions / total submissions)
@@ -163,14 +161,12 @@ const Dashboard = () => {
           )}
         </header>
 
-        {/* Main Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <StatCard
             title="Global Rank"
             value={`#${user.ranking.toLocaleString()}`}
             emoji="🏆"
           />
-          {/* --- NEW: Acceptance Rate Card --- */}
           <StatCard
             title="Acceptance Rate"
             value={`${acceptanceRate.toFixed(2)}%`}
@@ -183,7 +179,6 @@ const Dashboard = () => {
           />
         </div>
 
-        {/* Submission Stats */}
         <div className="bg-slate-800 p-6 rounded-xl border border-slate-700">
           <h2 className="text-xl font-semibold mb-4">Submission Stats</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -204,7 +199,6 @@ const Dashboard = () => {
   );
 };
 
-// Reusable Stat Card Component
 const StatCard = ({
   title,
   value,
@@ -222,7 +216,6 @@ const StatCard = ({
   </div>
 );
 
-// Reusable Difficulty Card Component
 const DifficultyCard = ({
   title,
   count,

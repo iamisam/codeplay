@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "/api"; // This is the key!
+const BASE_URL = "/api";
 
 const api = axios.create({
   baseURL: BASE_URL,

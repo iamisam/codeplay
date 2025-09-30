@@ -9,7 +9,7 @@ const ProtectedRoute = (): JSX.Element => {
   // Otherwise, redirect to the auth page, saving the original location.
 
   if (isAuthLoading) {
-    return <div>Loading...</div>; // Or a spinner component
+    return <div>Loading...</div>; // spinner component
   }
 
   return accessToken ? (
